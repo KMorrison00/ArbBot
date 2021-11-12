@@ -48,4 +48,6 @@ for e in range(len_ex):
 
 graph, paths = bellman_ford_multi(graph, 'ETH')
 for path in paths:
-    print_profit_opportunity_for_path_multi(graph, path)
+    # orfeed arb method only support up to 3 curriencies to trade, could try to tweek i suppose
+    if path and len(path) < 4:
+        print_profit_opportunity_for_path_multi(graph, path)
