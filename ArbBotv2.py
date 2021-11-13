@@ -6,6 +6,8 @@ import math
 from dotenv import load_dotenv, find_dotenv
 import os
 
+from web3.exceptions import ContractLogicError
+
 
 def main():
     load_dotenv(find_dotenv())
@@ -25,8 +27,8 @@ def main():
     # initialize the contract
     contract = w3.eth.contract(address=orfeed_data_address, abi=orfeed_abi)
 
-    coins = ["ETH", "MKR", "DAI", "USX", "OMG", "ZRX", "BAT", "LINK"]
-    exchanges = ["BANCOR", "KYBER", "UNISWAP", "UNIWSWAPV2"]
+    coins = ["ETH", "MKR", "DAI", "OMG", "ZRX", "BAT", "LINK"]
+    exchanges = ["BANCOR", "KYBER", "UNISWAP"]
     len_ex = len(exchanges)
     len_cur = len(coins)
 
@@ -38,7 +40,10 @@ def main():
             for j in range(len_cur):
                 # getExchangeRate method errors if you try to use the same currency as both args
                 if i != j:
-                    quote = contract.functions.getExchangeRate(coins[i], coins[j], exchanges[e], 1000000000).call()
+                    try:
+                        quote = contract.functions.getExchangeRate(coins[i], coins[j], exchanges[e], 1000000000).call()
+                    except ContractLogicError:
+                        quote = 0
                     # if a quote is zero it can't be logged or used in the algo, so skip any 0's
                     if quote != 0:
                         # divide the quote by 10^9 to compensate for lack of decimals in normal erc20 token prices
@@ -72,8 +77,8 @@ def test():
     # initialize the contract
     contract = w3.eth.contract(address=orfeed_data_address, abi=orfeed_abi)
 
-    coins = ["ETH", "MKR", "DAI", "USX", "OMG", "ZRX", "BAT", "LINK"]
-    exchanges = ["BANCOR", "KYBER", "UNISWAP", "UNIWSWAPV2"]
+    coins = ["ETH", "MKR", "DAI", "OMG", "ZRX", "BAT", "LINK"]
+    exchanges = ["BANCOR", "KYBER", "UNISWAP"]
     len_ex = len(exchanges)
     len_cur = len(coins)
 
