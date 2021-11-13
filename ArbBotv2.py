@@ -25,7 +25,7 @@ def main():
     # initialize the contract
     contract = w3.eth.contract(address=orfeed_data_address, abi=orfeed_abi)
 
-    coins = ["ETH", "MKR", "KNC", "ZRX", "BAT", "LINK"]
+    coins = ["ETH", "MKR", "DAI", "USX", "OMG", "ZRX", "BAT", "LINK"]
     exchanges = ["BANCOR", "KYBER", "UNISWAP", "UNIWSWAPV2"]
     len_ex = len(exchanges)
     len_cur = len(coins)
@@ -72,16 +72,14 @@ def test():
     # initialize the contract
     contract = w3.eth.contract(address=orfeed_data_address, abi=orfeed_abi)
 
-    coins = ["ETH", "MKR", "DAI", "OMG", "ZRX", "BAT", "LINK"]
+    coins = ["ETH", "MKR", "DAI", "USX", "OMG", "ZRX", "BAT", "LINK"]
     exchanges = ["BANCOR", "KYBER", "UNISWAP", "UNIWSWAPV2"]
     len_ex = len(exchanges)
     len_cur = len(coins)
 
     quote = contract.functions.getExchangeRate(coins[0], coins[3], exchanges[1], 1000000000).call()
-    decimal_count = contract.functions.getTokenDecimalCount("0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2")
     print(quote)
     print(quote / (10**9))
-    # MKR address: 0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2, divide by 10**9, same for eth
 
 
 if __name__ == "__main__":
